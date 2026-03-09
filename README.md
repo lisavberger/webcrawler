@@ -60,5 +60,5 @@ mvn test
 ## AI Assistance Disclosure
 
 GitHub Copilot was used as a development aid for code completion during the implementation of this project.  
-It was also used to assist in generating portions of the README documentation.  
-All suggestions were reviewed, validated, and modified where necessary by the authors.
+It was not used to generate complete source code blocks; instead, it provided small inline suggestions that were reviewed, adapted, and integrated manually by the authors.  
+Copilot was also used to assist in drafting parts of the README documentation.
