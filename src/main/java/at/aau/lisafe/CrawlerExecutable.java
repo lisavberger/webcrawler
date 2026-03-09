@@ -4,7 +4,16 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+/**
+ * Entry point of the web crawler application.
+ *
+ * This class reads the command line arguments (URL, depth, and allowed domains)
+ * and starts the crawling process. The crawling results are then converted
+ * into a Markdown report and written to a file.
+ *
+ * Expected arguments:
+ * <URL> <depth> <domains>
+ */
 public class CrawlerExecutable {
     public static void main(String... args) {
         if (args.length != 3) {

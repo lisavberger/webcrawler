@@ -7,14 +7,33 @@ import java.util.Set;
 
 import org.jsoup.nodes.Document;
 
+/**
+ * Recursively crawls a webpage and its linked pages up to the specified depth.
+ *
+ * The crawler performs the following steps:
+ * - fetches the webpage content
+ * - extracts headings and links
+ * - filters links by allowed domains
+ * - avoids revisiting already crawled URLs
+ * - records broken links
+ *
+ * @param url starting URL
+ * @param depth remaining recursion depth
+ * @param allowedDomains domains that are allowed to be crawled
+ * @param visitedUrls set of URLs that have already been visited
+ * @param visitor component responsible for fetching and parsing webpages
+ * @return a CrawlerResult representing the crawled webpage
+ */
 public class Crawler {
-    public static CrawlerResult crawl(String url, int depth, List<String> domains, Set<String> visitedUrls,
+    public static CrawlerResult crawl(String url, int depth, List<String> allowedDomains, Set<String> visitedUrls,
             PageVisitor visitor) {
+
+        // Prevent crawling the same URL multiple times
         if (visitedUrls.contains(url)) {
             return null;
         }
 
-        if (!CrawlerUtils.isAllowedDomain(url, domains)) {
+        if (!CrawlerUtils.isAllowedDomain(url, allowedDomains)) {
             System.out.println("Skipping URL (not in allowed domains): " + url);
             return null;
         }
@@ -24,14 +43,11 @@ public class Crawler {
         try {
             Document webpage = visitor.fetch(url);
 
-            String indent = "  ".repeat(depth);
-
-            System.out.println(indent + "Fetched page title: " + webpage.title());
-
             List<String> headings = visitor.extractHeadings(webpage);
 
             CrawlerResult webCrawlerResult = new CrawlerResult(url, false, headings, new ArrayList<>());
 
+            // Stop recursion once the maximum crawl depth is reached
             if (depth <= 0) {
                 return webCrawlerResult;
             }
@@ -39,7 +55,7 @@ public class Crawler {
             Set<String> links = visitor.extractLinks(webpage);
 
             for (String link : links) {
-                CrawlerResult linkedResult = crawl(link, depth - 1, domains, visitedUrls, visitor);
+                CrawlerResult linkedResult = crawl(link, depth - 1, allowedDomains, visitedUrls, visitor);
                 if (linkedResult != null) {
                     webCrawlerResult.addLinkedPage(linkedResult);
                 }
@@ -50,6 +66,8 @@ public class Crawler {
             String indent = "  ".repeat(depth);
             System.err.println(indent + "ERROR: Could not fetch following url: " + url);
             System.err.println(indent + "Reason: " + e.getMessage());
+
+            // If the page cannot be fetched, mark it as a broken link
             return new CrawlerResult(
                     url,
                     true,

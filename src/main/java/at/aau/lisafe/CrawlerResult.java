@@ -2,6 +2,18 @@ package at.aau.lisafe;
 
 import java.util.List;
 
+/**
+ * Represents the result of a crawled webpage.
+ *
+ * Each result stores:
+ * - the page URL
+ * - whether the page is broken
+ * - extracted headings from the page
+ * - recursively crawled linked pages
+ * 
+ * This class is used to build a tree-like structure of the crawled website,
+ * which can then be converted to Markdown or other formats.
+ */
 public class CrawlerResult {
     private final String url;
     private final boolean broken;
@@ -31,8 +43,13 @@ public class CrawlerResult {
         return linkedPages;
     }
 
+    /**
+     * Adds a crawled linked page to this result.
+     *
+     * @param linkedPage the result of the linked page crawl
+     */
     public void addLinkedPage(CrawlerResult linkedPage) {
         this.linkedPages.add(linkedPage);
     }
-    
+
 }
