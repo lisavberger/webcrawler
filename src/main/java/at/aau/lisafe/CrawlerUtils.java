@@ -66,7 +66,7 @@ public class CrawlerUtils {
         }
     }
 
-    private static boolean isAllowedDomain(String url, List<String> allowedDomains) {
+    public static boolean isAllowedDomain(String url, List<String> allowedDomains) {
         if (url == null || url.isBlank()) {
             return false;
         }
@@ -91,7 +91,7 @@ public class CrawlerUtils {
                     return true;
                 }
             }
-            return true;
+            return false;
         } catch (IllegalArgumentException | URISyntaxException e) {
             System.err.println("ERROR: The url you are trying to fetch is invalid: " + url);
             System.err.println("Reason: " + e.getMessage());
