@@ -38,6 +38,6 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 # Markdown files
-.md
+*.md
 # End of https://www.toptal.com/developers/gitignore/api/java,maven
  
