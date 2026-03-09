@@ -2,6 +2,7 @@ package at.aau.lisafe;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -137,12 +138,8 @@ public class WebCrawlerExecutable {
                 }
             }
             return true;
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | URISyntaxException e) {
             System.err.println("ERROR: The url you are trying to fetch is invalid: " + url);
-            System.err.println("Reason: " + e.getMessage());
-            return false;
-        } catch (Exception e) {
-            System.err.println("ERROR: Something went wrong during domain validation for url: " + url);
             System.err.println("Reason: " + e.getMessage());
             return false;
         }
