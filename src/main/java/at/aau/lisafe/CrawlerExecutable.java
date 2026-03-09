@@ -27,7 +27,7 @@ public class CrawlerExecutable {
         Set<String> visitedUrls = new HashSet<>();
         PageVisitor visitor = new PageVisitor();
 
-        CrawlerResult webCrawlerResult = CrawlerUtils.crawl(url, depth, domains, visitedUrls, visitor);
+        CrawlerResult webCrawlerResult = Crawler.crawl(url, depth, domains, visitedUrls, visitor);
 
         System.out.println("Print Result to Markdown...");
 
