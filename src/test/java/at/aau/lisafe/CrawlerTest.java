@@ -1,6 +1,5 @@
 package at.aau.lisafe;
 
-import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,7 +36,6 @@ public class CrawlerTest {
                 "https://example.com",
                 1,
                 List.of("example.com"),
-                new HashSet<>(),
                 visitor);
 
         assertNotNull(result);
@@ -64,7 +62,6 @@ public class CrawlerTest {
                 "https://example.com",
                 1,
                 List.of("example.com"),
-                new HashSet<>(),
                 visitor);
 
         assertNotNull(result);
@@ -91,7 +88,6 @@ public class CrawlerTest {
                 "https://example.com",
                 1,
                 List.of("example.com"),
-                new HashSet<>(),
                 visitor);
 
         assertNotNull(result);

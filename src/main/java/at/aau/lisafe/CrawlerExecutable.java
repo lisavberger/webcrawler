@@ -1,9 +1,7 @@
 package at.aau.lisafe;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 /**
  * Entry point of the web crawler application.
  *
@@ -32,11 +30,10 @@ public class CrawlerExecutable {
         System.out.println("URL: " + url);
         System.out.println("Depth: " + depth);
         System.out.println("Domains: " + domains);
-
-        Set<String> visitedUrls = new HashSet<>();
+        
         PageVisitor visitor = new PageVisitor();
 
-        CrawlerResult webCrawlerResult = Crawler.crawl(url, depth, domains, visitedUrls, visitor);
+        CrawlerResult webCrawlerResult = Crawler.crawl(url, depth, domains, visitor);
 
         System.out.println("Print Result to Markdown...");
 

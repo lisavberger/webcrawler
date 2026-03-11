@@ -2,6 +2,7 @@ package at.aau.lisafe;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +26,13 @@ import org.jsoup.nodes.Document;
  * @return a CrawlerResult representing the crawled webpage
  */
 public class Crawler {
+
+    //Overloaded as visitedUrls is only used for recursion and should not be provided by the user
+    public static CrawlerResult crawl (String url, int depth, List<String> allowedDomains, PageVisitor visitor) {
+        Set<String> visitedUrls = new HashSet<>();
+        return crawl(url, depth, allowedDomains, visitedUrls, visitor);
+    }   
+
     public static CrawlerResult crawl(String url, int depth, List<String> allowedDomains, Set<String> visitedUrls,
             PageVisitor visitor) {
 
