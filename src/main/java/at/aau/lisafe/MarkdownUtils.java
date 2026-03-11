@@ -79,4 +79,8 @@ public class MarkdownUtils {
             System.err.println("Reason: " + e.getMessage());
         }
     }
+
+    private MarkdownUtils() {
+        // Private constructor to prevent instantiation
+    }
 }

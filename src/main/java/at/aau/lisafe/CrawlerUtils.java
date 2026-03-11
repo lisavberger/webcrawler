@@ -109,4 +109,8 @@ public class CrawlerUtils {
             return null;
         }
     }
+
+    private CrawlerUtils() {
+        // Private constructor to prevent instantiation
+    }
 }

@@ -23,7 +23,17 @@ public class CrawlerExecutable {
         }
 
         String url = args[0];
-        int depth = Integer.parseInt(args[1]);
+
+        int depth;
+
+        try {
+            depth = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            System.out.println("Depth must be a valid integer.");
+            return;
+        }
+        
+        
         List<String> domains = Arrays.asList(args[2].split(","));
 
         System.out.println("Starting web crawler...");
@@ -51,8 +61,5 @@ public class CrawlerExecutable {
         System.out.println("Webcrawler finished...");
 
     }
-
-    
-
     
 }

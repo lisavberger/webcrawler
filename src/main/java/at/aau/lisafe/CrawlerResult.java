@@ -1,5 +1,6 @@
 package at.aau.lisafe;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,11 +37,11 @@ public class CrawlerResult {
     }
 
     public List<String> getHeadings() {
-        return headings;
+        return Collections.unmodifiableList(headings);
     }
 
     public List<CrawlerResult> getLinkedPages() {
-        return linkedPages;
+        return Collections.unmodifiableList(linkedPages);
     }
 
     /**

@@ -8,31 +8,40 @@ import java.util.Set;
 
 import org.jsoup.nodes.Document;
 
-/**
- * Recursively crawls a webpage and its linked pages up to the specified depth.
- *
- * The crawler performs the following steps:
- * - fetches the webpage content
- * - extracts headings and links
- * - filters links by allowed domains
- * - avoids revisiting already crawled URLs
- * - records broken links
- *
- * @param url starting URL
- * @param depth remaining recursion depth
- * @param allowedDomains domains that are allowed to be crawled
- * @param visitedUrls set of URLs that have already been visited
- * @param visitor component responsible for fetching and parsing webpages
- * @return a CrawlerResult representing the crawled webpage
- */
+/*
+    * Responsible for crawling webpages and their linked pages up to a specified depth.
+    *
+    * The crawler uses a PageVisitor to fetch and parse webpages, and it builds a
+    * CrawlerResult that contains the URL, headings, linked pages, and broken link status.
+    *
+    * The crawler also handles various edge cases such as:
+    * - avoiding infinite loops by tracking visited URLs
+    * - filtering links based on allowed domains
+    * - marking pages as broken if they cannot be fetched
+
+*/
 public class Crawler {
 
-    //Overloaded as visitedUrls is only used for recursion and should not be provided by the user
-    public static CrawlerResult crawl (String url, int depth, List<String> allowedDomains, PageVisitor visitor) {
+    /**
+     * Overloaded as visitedUrls is only used for recursion and should not be
+     * provided by the user
+     */
+    public static CrawlerResult crawl(String url, int depth, List<String> allowedDomains, PageVisitor visitor) {
         Set<String> visitedUrls = new HashSet<>();
         return crawl(url, depth, allowedDomains, visitedUrls, visitor);
-    }   
+    }
 
+    /**
+     * Recursively crawls a webpage and its linked pages up to the specified depth.
+     *
+     *
+     * @param url            starting URL
+     * @param depth          remaining recursion depth
+     * @param allowedDomains domains that are allowed to be crawled
+     * @param visitedUrls    set of URLs that have already been visited
+     * @param visitor        component responsible for fetching and parsing webpages
+     * @return a CrawlerResult representing the crawled webpage
+     */
     public static CrawlerResult crawl(String url, int depth, List<String> allowedDomains, Set<String> visitedUrls,
             PageVisitor visitor) {
 
