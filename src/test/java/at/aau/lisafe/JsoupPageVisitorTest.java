@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
-public class PageVisitorTest {
+public class JsoupPageVisitorTest {
 
     @Test
     public void testHeaderExtraction() {
-        PageVisitor visitor = new PageVisitor();
+        JsoupPageVisitor visitor = new JsoupPageVisitor();
 
         String html = """
                 <html>
@@ -38,7 +38,7 @@ public class PageVisitorTest {
 
     @Test
     public void testLinkExtraction() {
-        PageVisitor visitor = new PageVisitor();
+        JsoupPageVisitor visitor = new JsoupPageVisitor();
         String html = """
                 <html>
                     <head><title>Test Page</title></head>

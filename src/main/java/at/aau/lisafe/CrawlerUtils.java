@@ -1,7 +1,6 @@
 package at.aau.lisafe;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -12,6 +11,9 @@ import java.util.List;
  * - parsing site names from URLs
  */
 public class CrawlerUtils {
+    private CrawlerUtils() {
+        // Private constructor to prevent instantiation
+    }
 
     /**
      * Checks whether a given URL belongs to one of the allowed domains.
@@ -40,7 +42,7 @@ public class CrawlerUtils {
         }
 
         try {
-            URI uri = new URI(url);
+            URI uri = URI.create(url);
             String host = uri.getHost();
 
             if (host == null || host.isBlank()) {
@@ -60,7 +62,7 @@ public class CrawlerUtils {
                 }
             }
             return false;
-        } catch (IllegalArgumentException | URISyntaxException e) {
+        } catch (IllegalArgumentException e) {
             System.err.println("ERROR: The url you are trying to fetch is invalid: " + url);
             System.err.println("Reason: " + e.getMessage());
             return false;
@@ -108,9 +110,5 @@ public class CrawlerUtils {
             System.err.println("Reason: " + e.getMessage());
             return null;
         }
-    }
-
-    private CrawlerUtils() {
-        // Private constructor to prevent instantiation
     }
 }

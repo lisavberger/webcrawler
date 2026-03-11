@@ -1,10 +1,12 @@
 package at.aau.lisafe;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class MarkdownUtilsTest {
 
@@ -63,7 +65,7 @@ public class MarkdownUtilsTest {
     }
 
     @Test
-    public void shouldExportMarkdownToFile() {
+    public void shouldExportMarkdownToFile(@TempDir Path tempDir) {
         CrawlerResult result = new CrawlerResult(
             "https://example.com",
             false,
@@ -72,7 +74,7 @@ public class MarkdownUtilsTest {
         );
 
         String markdown = MarkdownUtils.toMarkdown(result);
-        String filename = "test-markdown.md";
+        String filename = tempDir.resolve("test-markdown.md").toString();
 
         MarkdownUtils.writeMarkdownToFile(markdown, filename);
 

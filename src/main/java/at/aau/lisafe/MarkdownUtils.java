@@ -1,5 +1,6 @@
 package at.aau.lisafe;
 
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -15,6 +16,9 @@ import java.io.IOException;
  * The hierarchy of pages is represented using indentation based on crawl depth.
  */
 public class MarkdownUtils {
+    private MarkdownUtils() {
+        // Private constructor to prevent instantiation
+    }
 
     /**
      * Converts the crawler result tree into a Markdown formatted string.
@@ -63,7 +67,6 @@ public class MarkdownUtils {
         }
     }
 
-
     /**
      * Writes the given Markdown string to a file with the specified filename.
      * If the file cannot be written, an error message is printed to the console.
@@ -72,15 +75,11 @@ public class MarkdownUtils {
      * @param filename the name of the file to write the Markdown content to
      */
     public static void writeMarkdownToFile(String markdown, String filename) {
-        try (java.io.FileWriter writer = new java.io.FileWriter(filename)) {
+        try (FileWriter writer = new FileWriter(filename)) {
             writer.write(markdown);
         } catch (IOException e) {
             System.err.println("ERROR: Could not write markdown to file: " + filename);
             System.err.println("Reason: " + e.getMessage());
         }
-    }
-
-    private MarkdownUtils() {
-        // Private constructor to prevent instantiation
     }
 }

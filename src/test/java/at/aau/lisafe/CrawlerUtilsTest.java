@@ -2,6 +2,7 @@ package at.aau.lisafe;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
@@ -62,9 +63,9 @@ public class CrawlerUtilsTest {
         String url3 = "https://example.anotherdomain.com/page3";
         String url4 = "invalid-url";
 
-        assertTrue(CrawlerUtils.extractSiteName(url1).equals("example"), "Site name should be 'example.com'");
-        assertTrue(CrawlerUtils.extractSiteName(url2).equals("sub"), "Site name should be 'sub.example.com'");
-        assertTrue(CrawlerUtils.extractSiteName(url3).equals("example"), "Site name should be 'example.anotherdomain.com'");
-        assertTrue(CrawlerUtils.extractSiteName(url4) == null, "Site name should be null for invalid URL");
+        assertEquals("example", CrawlerUtils.extractSiteName(url1), "Site name should be 'example'");
+        assertEquals("sub", CrawlerUtils.extractSiteName(url2), "Site name should be 'sub'");
+        assertEquals("example", CrawlerUtils.extractSiteName(url3), "Site name should be 'example'");
+        assertEquals(null, CrawlerUtils.extractSiteName(url4), "Invalid URL should return null");
     }
 }

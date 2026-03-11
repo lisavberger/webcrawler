@@ -15,10 +15,10 @@ import java.util.List;
 public class CrawlerExecutable {
     public static void main(String... args) {
         if (args.length != 3) {
-            System.out.println("You must pass URL, depth and domains as execution parameter:");
-            System.out.println("java -jar web-crawler.jar <URL> <depth> <domains>");
-            System.out.println("Example:");
-            System.out.println("java -jar web-crawler.jar https://example.com 2 example.com");
+            System.err.println("You must pass URL, depth and domains as execution parameter:");
+            System.err.println("java -jar web-crawler.jar <URL> <depth> <domains>");
+            System.err.println("Example:");
+            System.err.println("java -jar web-crawler.jar https://example.com 2 example.com");
             return;
         }
 
@@ -29,7 +29,7 @@ public class CrawlerExecutable {
         try {
             depth = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            System.out.println("Depth must be a valid integer.");
+            System.err.println("Depth must be a valid integer.");
             return;
         }
         
@@ -41,13 +41,13 @@ public class CrawlerExecutable {
         System.out.println("Depth: " + depth);
         System.out.println("Domains: " + domains);
         
-        PageVisitor visitor = new PageVisitor();
+        PageVisitor visitor = new JsoupPageVisitor();
 
-        CrawlerResult webCrawlerResult = Crawler.crawl(url, depth, domains, visitor);
+        CrawlerResult crawlerResult = Crawler.crawl(url, depth, domains, visitor);
 
         System.out.println("Print Result to Markdown...");
 
-        String markdownResult = MarkdownUtils.toMarkdown(webCrawlerResult);
+        String markdownResult = MarkdownUtils.toMarkdown(crawlerResult);
         String siteName = CrawlerUtils.extractSiteName(url);
         String filename = "web-crawler-result.md";
 

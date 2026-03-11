@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jsoup.nodes.Document;
-
 /*
     * Responsible for crawling webpages and their linked pages up to a specified depth.
     *
@@ -58,9 +56,9 @@ public class Crawler {
         visitedUrls.add(url);
 
         try {
-            Document webpage = visitor.fetch(url);
+            PageContent pageContent = visitor.visit(url);
 
-            List<String> headings = visitor.extractHeadings(webpage);
+            List<String> headings = pageContent.getHeadings();
 
             CrawlerResult webCrawlerResult = new CrawlerResult(url, false, headings, new ArrayList<>());
 
@@ -69,7 +67,7 @@ public class Crawler {
                 return webCrawlerResult;
             }
 
-            Set<String> links = visitor.extractLinks(webpage);
+            Set<String> links = pageContent.getLinks();
 
             for (String link : links) {
                 CrawlerResult linkedResult = crawl(link, depth - 1, allowedDomains, visitedUrls, visitor);
