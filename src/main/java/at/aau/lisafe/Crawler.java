@@ -58,7 +58,7 @@ public class Crawler {
         try {
             PageContent pageContent = visitor.visit(url);
 
-            List<String> headings = pageContent.getHeadings();
+            List<String> headings = pageContent.headings();
 
             CrawlerResult webCrawlerResult = new CrawlerResult(url, false, headings, new ArrayList<>());
 
@@ -67,7 +67,7 @@ public class Crawler {
                 return webCrawlerResult;
             }
 
-            Set<String> links = pageContent.getLinks();
+            Set<String> links = pageContent.links();
 
             for (String link : links) {
                 CrawlerResult linkedResult = crawl(link, depth - 1, allowedDomains, visitedUrls, visitor);
