@@ -2,6 +2,7 @@ package at.aau.lisafe;
 
 import java.util.Arrays;
 import java.util.List;
+
 /**
  * Entry point of the web crawler application.
  *
@@ -32,18 +33,17 @@ public class CrawlerExecutable {
             System.err.println("Depth must be a valid integer.");
             return;
         }
-        
-        
+
         List<String> domains = Arrays.asList(args[2].split(","));
 
         System.out.println("Starting web crawler...");
         System.out.println("URL: " + url);
         System.out.println("Depth: " + depth);
         System.out.println("Domains: " + domains);
-        
+
         PageVisitor visitor = new JsoupPageVisitor();
 
-        CrawlerResult crawlerResult = Crawler.crawl(url, depth, domains, visitor);
+        CrawlerResult crawlerResult = SequentialCrawler.crawl(url, depth, domains, visitor);
 
         System.out.println("Print Result to Markdown...");
 
@@ -51,15 +51,15 @@ public class CrawlerExecutable {
         String siteName = CrawlerUtils.extractSiteName(url);
         String filename = "web-crawler-result.md";
 
-        if(siteName != null) {
+        if (siteName != null) {
             siteName = siteName.replaceAll("[^a-zA-Z0-9]", "_");
             filename = siteName + "-web-crawler-result.md";
         }
-       
+
         MarkdownUtils.writeMarkdownToFile(markdownResult, filename);
 
         System.out.println("Webcrawler finished...");
 
     }
-    
+
 }

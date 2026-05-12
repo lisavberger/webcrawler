@@ -18,29 +18,25 @@ import java.util.Set;
     * - marking pages as broken if they cannot be fetched
 
 */
-public class Crawler {
+public class SequentialCrawler {
 
     /**
-     * Overloaded as visitedUrls is only used for recursion and should not be
-     * provided by the user
+     * Public method to start crawling from a given URL with specified depth and
+     * allowed domains.
+     * 
+     * 
+     * @param url            starting URL
+     * @param depth          maximum crawl depth
+     * @param allowedDomains list of allowed domains
+     * @param visitor        component responsible for fetching and parsing webpages
+     * @return a CrawlerResult representing the crawled webpage
      */
     public static CrawlerResult crawl(String url, int depth, List<String> allowedDomains, PageVisitor visitor) {
         Set<String> visitedUrls = new HashSet<>();
         return crawl(url, depth, allowedDomains, visitedUrls, visitor);
     }
 
-    /**
-     * Recursively crawls a webpage and its linked pages up to the specified depth.
-     *
-     *
-     * @param url            starting URL
-     * @param depth          remaining recursion depth
-     * @param allowedDomains domains that are allowed to be crawled
-     * @param visitedUrls    set of URLs that have already been visited
-     * @param visitor        component responsible for fetching and parsing webpages
-     * @return a CrawlerResult representing the crawled webpage
-     */
-    public static CrawlerResult crawl(String url, int depth, List<String> allowedDomains, Set<String> visitedUrls,
+    private static CrawlerResult crawl(String url, int depth, List<String> allowedDomains, Set<String> visitedUrls,
             PageVisitor visitor) {
 
         // Prevent crawling the same URL multiple times
@@ -60,11 +56,11 @@ public class Crawler {
 
             List<String> headings = pageContent.headings();
 
-            CrawlerResult webCrawlerResult = new CrawlerResult(url, false, headings, new ArrayList<>());
+            CrawlerResult crawlerResult = new CrawlerResult(url, false, headings, new ArrayList<>(), null);
 
             // Stop recursion once the maximum crawl depth is reached
             if (depth <= 0) {
-                return webCrawlerResult;
+                return crawlerResult;
             }
 
             Set<String> links = pageContent.links();
@@ -72,32 +68,38 @@ public class Crawler {
             for (String link : links) {
                 CrawlerResult linkedResult = crawl(link, depth - 1, allowedDomains, visitedUrls, visitor);
                 if (linkedResult != null) {
-                    webCrawlerResult.addLinkedPage(linkedResult);
+                    crawlerResult.addLinkedPage(linkedResult);
                 }
             }
 
-            return webCrawlerResult;
+            return crawlerResult;
         } catch (IOException e) {
             String indent = "  ".repeat(depth);
             System.err.println(indent + "ERROR: Could not fetch following url: " + url);
             System.err.println(indent + "Reason: " + e.getMessage());
 
             // If the page cannot be fetched, mark it as a broken link
-            return new CrawlerResult(
+            return CrawlerResult.broken(
                     url,
-                    true,
-                    List.of(),
-                    new ArrayList<>());
+                    CrawlerError.fromException(e)
+
+            );
         } catch (IllegalArgumentException e) {
             String indent = "  ".repeat(depth);
             System.err.println(indent + "ERROR: The url you are trying to fetch is invalid: " + url);
             System.err.println(indent + "Reason: " + e.getMessage());
-            return null;
+            return CrawlerResult.broken(
+                    url,
+                    CrawlerError.fromException(e)
+
+            );
         } catch (Exception e) {
             String indent = "  ".repeat(depth);
             System.err.println(indent + "ERROR: Something went wrong in Web Crawler Execution");
             System.err.println(indent + "Reason: " + e.getMessage());
-            return null;
+            return CrawlerResult.broken(
+                    url,
+                    CrawlerError.fromException(e));
         }
     }
 }

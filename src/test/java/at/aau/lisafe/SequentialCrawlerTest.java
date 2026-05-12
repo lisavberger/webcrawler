@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 
-public class CrawlerTest {
+public class SequentialCrawlerTest {
 
     @Test
     public void shouldCrawlOnlyUntilGivenDepth() {
@@ -32,7 +32,7 @@ public class CrawlerTest {
                 </body></html>
                 """);
 
-        CrawlerResult result = Crawler.crawl(
+        CrawlerResult result = SequentialCrawler.crawl(
                 "https://example.com",
                 1,
                 List.of("example.com"),
@@ -58,7 +58,7 @@ public class CrawlerTest {
                 </body></html>
                 """);
 
-        CrawlerResult result = Crawler.crawl(
+        CrawlerResult result = SequentialCrawler.crawl(
                 "https://example.com",
                 1,
                 List.of("example.com"),
@@ -84,7 +84,7 @@ public class CrawlerTest {
                 </body></html>
                 """);
 
-        CrawlerResult result = Crawler.crawl(
+        CrawlerResult result = SequentialCrawler.crawl(
                 "https://example.com",
                 1,
                 List.of("example.com"),

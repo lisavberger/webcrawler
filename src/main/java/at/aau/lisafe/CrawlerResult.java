@@ -1,5 +1,6 @@
 package at.aau.lisafe;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * - whether the page is broken
  * - extracted headings from the page
  * - recursively crawled linked pages
+ * - any error encountered during crawling
  * 
  * This class is used to build a tree-like structure of the crawled website,
  * which can then be converted to Markdown or other formats.
@@ -20,12 +22,19 @@ public class CrawlerResult {
     private final boolean broken;
     private final List<String> headings;
     private final List<CrawlerResult> linkedPages;
+    private final CrawlerError error;
 
-    public CrawlerResult(String url, boolean broken, List<String> headings, List<CrawlerResult> linkedPages) {
+    public CrawlerResult(String url, boolean broken, List<String> headings, List<CrawlerResult> linkedPages,
+            CrawlerError error) {
         this.url = url;
         this.broken = broken;
         this.headings = headings;
         this.linkedPages = linkedPages;
+        this.error = error;
+    }
+
+    public static CrawlerResult broken(String url, CrawlerError error) {
+        return new CrawlerResult(url, true, List.of(), new ArrayList<>(), error);
     }
 
     public String getUrl() {
@@ -34,6 +43,10 @@ public class CrawlerResult {
 
     public boolean isBroken() {
         return broken;
+    }
+
+    public CrawlerError getError() {
+        return error;
     }
 
     public List<String> getHeadings() {

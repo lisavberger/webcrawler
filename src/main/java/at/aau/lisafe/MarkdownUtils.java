@@ -33,16 +33,6 @@ public class MarkdownUtils {
         return markdown.toString();
     }
 
-    /**
-     * Recursive helper method used to build the Markdown structure.
-     *
-     * Each level of the crawl hierarchy increases the indentation,
-     * visually representing the depth of the crawled pages.
-     *
-     * @param result   current crawler result
-     * @param markdown StringBuilder used to build the Markdown output
-     * @param depth    current recursion depth
-     */
     private static void toMarkdownHelper(CrawlerResult result, StringBuilder markdown, int depth) {
         if (result == null) {
             return;
