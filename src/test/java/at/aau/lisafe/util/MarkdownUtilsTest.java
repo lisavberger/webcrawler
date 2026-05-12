@@ -1,4 +1,4 @@
-package at.aau.lisafe;
+package at.aau.lisafe.util;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -8,6 +8,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
+import at.aau.lisafe.crawler.CrawlerResult;
 
 public class MarkdownUtilsTest {
 

@@ -1,4 +1,4 @@
-package at.aau.lisafe;
+package at.aau.lisafe.crawler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import at.aau.lisafe.logger.LoggerFactory;
+import at.aau.lisafe.util.CrawlerUtils;
+import at.aau.lisafe.visitor.PageContent;
+import at.aau.lisafe.visitor.PageVisitor;
 
 /*
     * Responsible for crawling webpages and their linked pages up to a specified depth.
@@ -23,7 +25,7 @@ import at.aau.lisafe.logger.LoggerFactory;
 */
 public class SequentialCrawler {
 
-    private static final Logger logger = LoggerFactory.getLogger(SequentialCrawler.class);
+    private static final Logger LOGGER = Logger.getLogger(SequentialCrawler.class.getName());
 
     /**
      * Public method to start crawling from a given URL with specified depth and
@@ -50,7 +52,7 @@ public class SequentialCrawler {
         }
 
         if (!CrawlerUtils.isAllowedDomain(url, allowedDomains)) {
-            logger.info(() -> "Skipping URL (not in allowed domains): " + url);
+            LOGGER.info(() -> "Skipping URL (not in allowed domains): " + url);
             return null;
         }
 
@@ -80,19 +82,17 @@ public class SequentialCrawler {
             return crawlerResult;
         } catch (IOException e) {
             String indent = "  ".repeat(depth);
-            logger.severe(() -> indent + "ERROR: Could not fetch following url: " + url);
-            logger.severe(() -> indent + "Reason: " + e.getMessage());
+            LOGGER.severe(() -> indent + "ERROR: Could not fetch following url: " + url);
+            LOGGER.severe(() -> indent + "Reason: " + e.getMessage());
 
             // If the page cannot be fetched, mark it as a broken link
             return CrawlerResult.broken(
                     url,
-                    CrawlerError.fromException(e)
-
-            );
+                    CrawlerError.fromException(e));
         } catch (IllegalArgumentException e) {
             String indent = "  ".repeat(depth);
-            logger.severe(() -> indent + "ERROR: The url you are trying to fetch is invalid: " + url);
-            logger.severe(() -> indent + "Reason: " + e.getMessage());
+            LOGGER.severe(() -> indent + "ERROR: The url you are trying to fetch is invalid: " + url);
+            LOGGER.severe(() -> indent + "Reason: " + e.getMessage());
             return CrawlerResult.broken(
                     url,
                     CrawlerError.fromException(e)
@@ -100,8 +100,8 @@ public class SequentialCrawler {
             );
         } catch (Exception e) {
             String indent = "  ".repeat(depth);
-            logger.severe(() -> indent + "ERROR: Something went wrong in Web Crawler Execution");
-            logger.severe(() -> indent + "Reason: " + e.getMessage());
+            LOGGER.severe(() -> indent + "ERROR: Something went wrong in Web Crawler Execution");
+            LOGGER.severe(() -> indent + "Reason: " + e.getMessage());
             return CrawlerResult.broken(
                     url,
                     CrawlerError.fromException(e));

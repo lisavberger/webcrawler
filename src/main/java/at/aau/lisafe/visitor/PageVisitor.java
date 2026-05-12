@@ -1,4 +1,4 @@
-package at.aau.lisafe;
+package at.aau.lisafe.visitor;
 
 /**
  * A visitor for extracting information from web pages.

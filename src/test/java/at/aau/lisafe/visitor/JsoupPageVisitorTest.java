@@ -1,4 +1,4 @@
-package at.aau.lisafe;
+package at.aau.lisafe.visitor;
 
 import java.util.List;
 import java.util.Set;

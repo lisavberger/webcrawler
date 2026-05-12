@@ -1,10 +1,8 @@
-package at.aau.lisafe;
+package at.aau.lisafe.util;
 
 import java.net.URI;
 import java.util.List;
 import java.util.logging.Logger;
-
-import at.aau.lisafe.logger.LoggerFactory;
 
 /**
  * Utility methods used by the crawler.
@@ -18,7 +16,7 @@ public class CrawlerUtils {
         // Private constructor to prevent instantiation
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(CrawlerUtils.class);
+    private static final Logger LOGGER = Logger.getLogger(CrawlerUtils.class.getName());
 
     /**
      * Checks whether a given URL belongs to one of the allowed domains.
@@ -68,8 +66,8 @@ public class CrawlerUtils {
             }
             return false;
         } catch (IllegalArgumentException e) {
-            logger.severe(() -> "ERROR: The url you are trying to fetch is invalid: " + url);
-            logger.severe(() -> "Reason: " + e.getMessage());
+            LOGGER.severe(() -> "ERROR: The url you are trying to fetch is invalid: " + url);
+            LOGGER.severe(() -> "Reason: " + e.getMessage());
             return false;
         }
 
@@ -113,8 +111,8 @@ public class CrawlerUtils {
             return host;
 
         } catch (IllegalArgumentException e) {
-            logger.severe(() -> "ERROR: The url you are trying to fetch is invalid: " + url);
-            logger.severe(() -> "Reason: " + e.getMessage());
+            LOGGER.severe(() -> "ERROR: The url you are trying to fetch is invalid: " + url);
+            LOGGER.severe(() -> "Reason: " + e.getMessage());
             return null;
         }
     }

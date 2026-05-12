@@ -1,10 +1,10 @@
-package at.aau.lisafe;
+package at.aau.lisafe.util;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import at.aau.lisafe.logger.LoggerFactory;
+import at.aau.lisafe.crawler.CrawlerResult;
 
 /**
  * Utility class responsible for converting crawler results into Markdown.
@@ -23,7 +23,7 @@ public class MarkdownUtils {
         // Private constructor to prevent instantiation
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(MarkdownUtils.class);
+    private static final Logger LOGGER = Logger.getLogger(MarkdownUtils.class.getName());
 
     /**
      * Converts the crawler result tree into a Markdown formatted string.
@@ -73,8 +73,8 @@ public class MarkdownUtils {
         try (FileWriter writer = new FileWriter(filename)) {
             writer.write(markdown);
         } catch (IOException e) {
-            logger.severe(() -> "ERROR: Could not write markdown to file: " + filename);
-            logger.severe(() -> "Reason: " + e.getMessage());
+            LOGGER.severe(() -> "ERROR: Could not write markdown to file: " + filename);
+            LOGGER.severe(() -> "Reason: " + e.getMessage());
         }
     }
 }

@@ -1,10 +1,15 @@
-package at.aau.lisafe;
+package at.aau.lisafe.app;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import at.aau.lisafe.logger.LoggerFactory;
+import at.aau.lisafe.crawler.CrawlerResult;
+import at.aau.lisafe.crawler.SequentialCrawler;
+import at.aau.lisafe.util.CrawlerUtils;
+import at.aau.lisafe.util.MarkdownUtils;
+import at.aau.lisafe.visitor.JsoupPageVisitor;
+import at.aau.lisafe.visitor.PageVisitor;
 
 /**
  * Entry point of the web crawler application.
@@ -17,16 +22,15 @@ import at.aau.lisafe.logger.LoggerFactory;
  * <URL> <depth> <domains>
  */
 public class CrawlerExecutable {
-    private static final Logger logger = LoggerFactory.getLogger(CrawlerExecutable.class);
+    private static final Logger LOGGER = Logger.getLogger(CrawlerExecutable.class.getName());
 
     public static void main(String... args) {
-        LoggerFactory.initialize();
 
         if (args.length != 3) {
-            logger.severe("You must pass URL, depth and domains as execution parameter:");
-            logger.severe("java -jar web-crawler.jar <URL> <depth> <domains>");
-            logger.severe("Example:");
-            logger.severe("java -jar web-crawler.jar https://example.com 2 example.com");
+            LOGGER.severe("You must pass URL, depth and domains as execution parameter:");
+            LOGGER.severe("java -jar web-crawler.jar <URL> <depth> <domains>");
+            LOGGER.severe("Example:");
+            LOGGER.severe("java -jar web-crawler.jar https://example.com 2 example.com");
             return;
         }
 
@@ -37,22 +41,22 @@ public class CrawlerExecutable {
         try {
             depth = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            logger.severe("Depth must be a valid integer.");
+            LOGGER.severe("Depth must be a valid integer.");
             return;
         }
 
         List<String> domains = Arrays.asList(args[2].split(","));
 
-        logger.info("Starting web crawler...");
-        logger.info(() -> "URL: " + url);
-        logger.info(() -> "Depth: " + depth);
-        logger.info(() -> "Domains: " + domains);
+        LOGGER.info("Starting web crawler...");
+        LOGGER.info(() -> "URL: " + url);
+        LOGGER.info(() -> "Depth: " + depth);
+        LOGGER.info(() -> "Domains: " + domains);
 
         PageVisitor visitor = new JsoupPageVisitor();
 
         CrawlerResult crawlerResult = SequentialCrawler.crawl(url, depth, domains, visitor);
 
-        logger.info("Print Result to Markdown...");
+        LOGGER.info("Print Result to Markdown...");
 
         String markdownResult = MarkdownUtils.toMarkdown(crawlerResult);
         String siteName = CrawlerUtils.extractSiteName(url);
@@ -65,8 +69,7 @@ public class CrawlerExecutable {
 
         MarkdownUtils.writeMarkdownToFile(markdownResult, filename);
 
-        logger.info("Webcrawler finished...");
+        LOGGER.info("Webcrawler finished...");
 
     }
-
 }

@@ -1,4 +1,4 @@
-package at.aau.lisafe;
+package at.aau.lisafe.crawler;
 
 import java.util.ArrayList;
 import java.util.Collections;

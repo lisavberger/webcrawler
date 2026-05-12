@@ -1,4 +1,4 @@
-package at.aau.lisafe;
+package at.aau.lisafe.crawler;
 
 public class CrawlerError {
 

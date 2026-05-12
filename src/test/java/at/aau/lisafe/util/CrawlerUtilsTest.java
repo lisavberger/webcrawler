@@ -1,4 +1,4 @@
-package at.aau.lisafe;
+package at.aau.lisafe.util;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class CrawlerUtilsTest {
     @Test
     public void shouldAllowExactDomain() {
         String url1 = "https://example.com/page1";
-    
+
         List<String> allowedDomains = List.of("example.com");
 
         assertTrue(CrawlerUtils.isAllowedDomain(url1, allowedDomains), "URL 1 should be allowed");
@@ -32,9 +32,9 @@ public class CrawlerUtilsTest {
     @Test
     public void shouldNotAllowInvalidUrl() {
         String url = "invalid-url";
-     
+
         List<String> allowedDomains = List.of("example.com");
-     
+
         assertFalse(CrawlerUtils.isAllowedDomain(url, allowedDomains), "Invalid URL should not be allowed");
     }
 
@@ -44,7 +44,8 @@ public class CrawlerUtilsTest {
 
         List<String> allowedDomains = List.of("example.com");
 
-        assertFalse(CrawlerUtils.isAllowedDomain(url, allowedDomains), "URL with different domain should not be allowed");
+        assertFalse(CrawlerUtils.isAllowedDomain(url, allowedDomains),
+                "URL with different domain should not be allowed");
     }
 
     @Test
@@ -53,7 +54,8 @@ public class CrawlerUtilsTest {
 
         List<String> allowedDomains = List.of("example.com");
 
-        assertFalse(CrawlerUtils.isAllowedDomain(url, allowedDomains), "URL with different subdomain should not be allowed");
+        assertFalse(CrawlerUtils.isAllowedDomain(url, allowedDomains),
+                "URL with different subdomain should not be allowed");
     }
 
     @Test

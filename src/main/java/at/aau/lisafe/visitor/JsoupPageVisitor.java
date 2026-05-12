@@ -1,4 +1,4 @@
-package at.aau.lisafe;
+package at.aau.lisafe.visitor;
 
 import java.io.IOException;
 import java.util.LinkedHashSet;
@@ -19,8 +19,10 @@ import org.jsoup.nodes.Element;
  */
 public class JsoupPageVisitor implements PageVisitor {
 
-    /* (non-Javadoc)
-     * @see at.aau.lisafe.PageVisitor#visit(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see at.aau.lisafe.visitor.PageVisitor#visit(java.lang.String)
      */
     @Override
     public PageContent visit(String url) throws Exception {
