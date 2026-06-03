@@ -41,7 +41,7 @@ This will compile the project, execute the unit tests and build a .jar file.
 The crawler is executed from the command line.
 
 ```bash
-java -jar target/web-crawler-1.0.0-SNAPSHOT.jar <URL> <depth> <domains>
+java -jar target/web-crawler-2.0.0-SNAPSHOT.jar <URL> <depth> <domains>
 ```
 
 ### Parameters
@@ -53,7 +53,7 @@ java -jar target/web-crawler-1.0.0-SNAPSHOT.jar <URL> <depth> <domains>
 
 ### Example
 ```bash
-java -jar target/web-crawler-1.0.0-SNAPSHOT.jar https://ilogs.systems 1 ilogs.systems
+java -jar target/web-crawler-2.0.0-SNAPSHOT.jar https://ilogs.systems 1 ilogs.systems
 ```
 
 ## Output 
