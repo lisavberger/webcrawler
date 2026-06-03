@@ -4,6 +4,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
@@ -59,15 +60,30 @@ public class CrawlerUtilsTest {
     }
 
     @Test
-    public void testSiteNameExtraction() {
-        String url1 = "https://example.com/page1";
-        String url2 = "https://sub.example.com/page2";
-        String url3 = "https://example.anotherdomain.com/page3";
-        String url4 = "invalid-url";
+    public void shouldExtractFirstHostSegmentFromSimpleDomain() {
+        String url = "https://example.com/page1";
 
-        assertEquals("example", CrawlerUtils.extractSiteName(url1), "Site name should be 'example'");
-        assertEquals("sub", CrawlerUtils.extractSiteName(url2), "Site name should be 'sub'");
-        assertEquals("example", CrawlerUtils.extractSiteName(url3), "Site name should be 'example'");
-        assertEquals(null, CrawlerUtils.extractSiteName(url4), "Invalid URL should return null");
+        assertEquals("example", CrawlerUtils.extractFirstHostSegment(url), "First host segment should be 'example'");
+    }
+
+    @Test
+    public void shouldExtractFirstHostSegmentFromSubdomain() {
+        String url = "https://sub.example.com/page2";
+
+        assertEquals("sub", CrawlerUtils.extractFirstHostSegment(url), "First host segment should be 'sub'");
+    }
+
+    @Test
+    public void shouldExtractFirstHostSegmentFromNestedDomain() {
+        String url = "https://example.anotherdomain.com/page3";
+
+        assertEquals("example", CrawlerUtils.extractFirstHostSegment(url), "First host segment should be 'example'");
+    }
+
+    @Test
+    public void shouldReturnNullForInvalidUrl() {
+        String url = "invalid-url";
+
+        assertNull(CrawlerUtils.extractFirstHostSegment(url), "Invalid URL should return null");
     }
 }

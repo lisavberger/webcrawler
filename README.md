@@ -8,12 +8,25 @@ The crawler supports:
 - detection of broken links
 - structured output as markdown file
 - automated tests via JUnit
+- concurrent crawling using a fixed thread pool
+- each webpage is processed as a separate crawl task
+- thread-safe tracking of already visited URLs
+- clean error handling with errors included in the Markdown report
+- clean boundary to jsoup through the PageVisitor interface
+
+The crawler uses a fixed-size thread pool internally for concurrent crawling.
 
 Used Technology:
 - Java 25
 - Maven
 - jsoup
 - JUnit 5
+
+## Error Handling
+
+Errors during crawling are caught and stored in the crawler result structure.
+Broken pages are marked in the generated Markdown report and include error details such as the exception type and message.
+The application is designed to continue crawling even if individual pages cannot be processed.
 
 ## Build
 
@@ -59,6 +72,8 @@ mvn test
 
 ## AI Assistance Disclosure
 
-GitHub Copilot was used as a development aid for code completion during the implementation of this project.  
-It was not used to generate complete source code blocks; instead, it provided small inline suggestions that were reviewed, adapted, and integrated manually by the authors.  
+GitHub Copilot was used as a development aid for small inline code-completion suggestions only.
+It was not used to generate complete source code blocks or complete solution parts automatically.
+All suggestions were reviewed, adapted, and integrated manually by the authors.
+
 Copilot was also used to assist in drafting parts of the README documentation.

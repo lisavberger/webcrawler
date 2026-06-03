@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 public class JsoupPageVisitorTest {
 
     @Test
-    public void testHeaderExtraction() {
+    public void shouldExtractHeadings() {
         JsoupPageVisitor visitor = new JsoupPageVisitor();
 
         String html = """
@@ -37,7 +37,7 @@ public class JsoupPageVisitorTest {
     }
 
     @Test
-    public void testLinkExtraction() {
+    public void shouldExtractLinks() {
         JsoupPageVisitor visitor = new JsoupPageVisitor();
         String html = """
                 <html>
@@ -52,9 +52,9 @@ public class JsoupPageVisitorTest {
         Document document = Jsoup.parse(html, "https://example.com");
         Set<String> links = visitor.extractLinks(document);
 
-        assertEquals(2, links.size());
-        assertTrue(links.contains("https://example.com/about"));
-        assertTrue(links.contains("https://example.com/contact"));
+        assertEquals(2, links.size(), "There should be 2 links extracted");
+        assertTrue(links.contains("https://example.com/about"), "Link to 'About' page should be extracted");
+        assertTrue(links.contains("https://example.com/contact"), "Link to 'Contact' page should be extracted");
     }
 
 }

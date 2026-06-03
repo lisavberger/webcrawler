@@ -28,13 +28,13 @@ public class CrawlerResult {
             CrawlerError error) {
         this.url = url;
         this.broken = broken;
-        this.headings = headings;
-        this.linkedPages = linkedPages;
+        this.headings = List.copyOf(headings);
+        this.linkedPages = new ArrayList<>(linkedPages);
         this.error = error;
     }
 
     public static CrawlerResult broken(String url, CrawlerError error) {
-        return new CrawlerResult(url, true, List.of(), new ArrayList<>(), error);
+        return new CrawlerResult(url, true, List.of(), List.of(), error);
     }
 
     public String getUrl() {
@@ -60,9 +60,14 @@ public class CrawlerResult {
     /**
      * Adds a crawled linked page to this result.
      *
+     * <p>
+     * Package-private: only the tree builder in this package is allowed
+     * to mutate the children list.
+     * </p>
+     *
      * @param linkedPage the result of the linked page crawl
      */
-    public void addLinkedPage(CrawlerResult linkedPage) {
+    void addLinkedPage(CrawlerResult linkedPage) {
         this.linkedPages.add(linkedPage);
     }
 

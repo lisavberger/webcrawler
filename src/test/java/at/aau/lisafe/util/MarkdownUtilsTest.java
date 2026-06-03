@@ -1,14 +1,17 @@
 package at.aau.lisafe.util;
 
 import java.io.File;
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import at.aau.lisafe.crawler.CrawlerError;
 import at.aau.lisafe.crawler.CrawlerResult;
 
 public class MarkdownUtilsTest {
@@ -30,16 +33,15 @@ public class MarkdownUtilsTest {
 
     @Test
     void shouldMarkBrokenLinkInMarkdown() {
-        CrawlerResult result = new CrawlerResult(
+        CrawlerResult result = CrawlerResult.broken(
                 "https://example.com/broken",
-                true,
-                List.of(),
-                new ArrayList<>(),
-                null);
+                new CrawlerError("Page not found", "IOException"));
 
         String markdown = MarkdownUtils.toMarkdown(result);
 
-        assertTrue(markdown.contains("Broken: true"));
+        assertTrue(markdown.contains("(BROKEN)"));
+        assertTrue(markdown.contains("Error Type: IOException"));
+        assertTrue(markdown.contains("Error Message: Page not found"));
         assertTrue(markdown.contains("https://example.com/broken"));
     }
 
@@ -84,5 +86,13 @@ public class MarkdownUtilsTest {
         File file = new File(filename);
         assertTrue(file.exists(), "Markdown file should be created");
         file.delete();
+    }
+
+    @Test
+    public void shouldThrowUncheckedIOExceptionWhenFileCannotBeWritten(@TempDir Path tempDir) {
+        String filename = tempDir.resolve("nonexistent-subdir").resolve("test.md").toString();
+
+        assertThrows(UncheckedIOException.class,
+                () -> MarkdownUtils.writeMarkdownToFile("# anything", filename));
     }
 }

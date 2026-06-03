@@ -19,13 +19,15 @@ import org.jsoup.nodes.Element;
  */
 public class JsoupPageVisitor implements PageVisitor {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see at.aau.lisafe.visitor.PageVisitor#visit(java.lang.String)
-     */
+    private static final int REQUEST_TIMEOUT_MS = 10000;
+    private static final String USER_AGENT = "AAU-WebCrawler/1.0 (Student Project)";
+    private static final String HEADING_SELECTOR = "h1, h2, h3, h4, h5, h6";
+    private static final String LINK_SELECTOR = "a[href]";
+    private static final String ABSOLUTE_HREF_ATTRIBUTE = "abs:href";
+    private static final String URL_FRAGMENT_DELIMITER = "#";
+
     @Override
-    public PageContent visit(String url) throws Exception {
+    public PageContent visit(String url) throws IOException {
         Document webpage = fetch(url);
         List<String> headings = extractHeadings(webpage);
         Set<String> links = extractLinks(webpage);
@@ -43,8 +45,8 @@ public class JsoupPageVisitor implements PageVisitor {
     Document fetch(String url) throws IOException {
         return Jsoup.connect(url)
                 .followRedirects(true)
-                .timeout(10000)
-                .userAgent("AAU-WebCrawler/1.0 (Student Project)")
+                .timeout(REQUEST_TIMEOUT_MS)
+                .userAgent(USER_AGENT)
                 .get();
     }
 
@@ -57,7 +59,7 @@ public class JsoupPageVisitor implements PageVisitor {
      * @return list of headings found on the page
      */
     List<String> extractHeadings(Document webpage) {
-        return webpage.select("h1, h2, h3, h4, h5, h6").eachText();
+        return webpage.select(HEADING_SELECTOR).eachText();
     }
 
     /**
@@ -72,15 +74,14 @@ public class JsoupPageVisitor implements PageVisitor {
     Set<String> extractLinks(Document webpage) {
         Set<String> uniqueLinks = new LinkedHashSet<>();
 
-        // Iterate over all anchor tags containing an href attribute
-        for (Element aTag : webpage.select("a[href]")) {
-            String absoluteLink = aTag.attr("abs:href");
+        for (Element aTag : webpage.select(LINK_SELECTOR)) {
+            String absoluteLink = aTag.attr(ABSOLUTE_HREF_ATTRIBUTE);
 
             if (absoluteLink == null || absoluteLink.isBlank()) {
                 continue;
             }
 
-            int fragmentPosition = absoluteLink.indexOf("#");
+            int fragmentPosition = absoluteLink.indexOf(URL_FRAGMENT_DELIMITER);
 
             if (fragmentPosition >= 0) {
                 absoluteLink = absoluteLink.substring(0, fragmentPosition);

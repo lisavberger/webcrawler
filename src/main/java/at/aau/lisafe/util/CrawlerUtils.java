@@ -2,6 +2,7 @@ package at.aau.lisafe.util;
 
 import java.net.URI;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -66,24 +67,25 @@ public class CrawlerUtils {
             }
             return false;
         } catch (IllegalArgumentException e) {
-            LOGGER.severe(() -> "ERROR: The url you are trying to fetch is invalid: " + url);
-            LOGGER.severe(() -> "Reason: " + e.getMessage());
+            LOGGER.log(Level.WARNING, "Invalid URL: " + url, e);
             return false;
         }
 
     }
 
     /**
-     * Extracts the site name from a given URL.
-     * The method retrieves the host from the URL and returns the first segment
-     * before the dot.
-     * For example, for "https://www.example.com/page1", it will return "example".
-     * For "https://sub.example.com/page2", it will return "sub".
-     * 
-     * @param url
-     * @return hostname of the URL or null if the URL is invalid
+     * Extracts the first host segment from a given URL.
+     *
+     * The method retrieves the host of the URL, strips a leading {@code www.}
+     * and returns the first label before the next dot. Examples:
+     * {@code https://www.example.com/page1} returns {@code "example"};
+     * {@code https://sub.example.com/page2} returns {@code "sub"}.
+     *
+     * @param url the URL to extract the first host segment from
+     * @return the leading host label, or {@code null} if the URL is invalid or has
+     *         no host
      */
-    public static String extractSiteName(String url) {
+    public static String extractFirstHostSegment(String url) {
 
         if (url == null || url.isBlank()) {
             return null;
@@ -111,8 +113,7 @@ public class CrawlerUtils {
             return host;
 
         } catch (IllegalArgumentException e) {
-            LOGGER.severe(() -> "ERROR: The url you are trying to fetch is invalid: " + url);
-            LOGGER.severe(() -> "Reason: " + e.getMessage());
+            LOGGER.log(Level.WARNING, "Invalid URL: " + url, e);
             return null;
         }
     }

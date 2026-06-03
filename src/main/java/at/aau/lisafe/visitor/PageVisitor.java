@@ -1,5 +1,7 @@
 package at.aau.lisafe.visitor;
 
+import java.io.IOException;
+
 /**
  * A visitor for extracting information from web pages.
  */
@@ -10,8 +12,9 @@ public interface PageVisitor {
      *
      * @param url the URL to visit
      * @return a PageContent object containing the extracted headings and links
-     * @throws Exception if an error occurs while fetching or parsing the page
+     * @throws IOException           if the page cannot be fetched or parsed
+     * @throws IllegalArgumentException if {@code url} is not a valid URL
      */
-    PageContent visit(String url) throws Exception;
+    PageContent visit(String url) throws IOException;
 
 }

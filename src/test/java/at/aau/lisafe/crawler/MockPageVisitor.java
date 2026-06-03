@@ -12,9 +12,14 @@ import at.aau.lisafe.visitor.PageVisitor;
 
 public class MockPageVisitor implements PageVisitor {
     private final Map<String, String> pages = new HashMap<>();
+    private final Map<String, Integer> visitCounts = new HashMap<>();
 
     public void addPage(String url, String html) {
         pages.put(url, html);
+    }
+
+    public int getVisitCount(String url) {
+        return visitCounts.getOrDefault(url, 0);
     }
 
     @Override
@@ -26,6 +31,7 @@ public class MockPageVisitor implements PageVisitor {
         }
 
         Document document = Jsoup.parse(html, url);
+        visitCounts.merge(url, 1, Integer::sum);
         return new PageContent(
                 document.select("h1, h2, h3, h4, h5, h6").eachText(),
                 document.select("a[href]").eachAttr("abs:href").stream().collect(java.util.stream.Collectors.toSet()));

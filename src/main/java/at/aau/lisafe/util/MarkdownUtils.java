@@ -2,7 +2,7 @@ package at.aau.lisafe.util;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.logging.Logger;
+import java.io.UncheckedIOException;
 
 import at.aau.lisafe.crawler.CrawlerResult;
 
@@ -23,7 +23,9 @@ public class MarkdownUtils {
         // Private constructor to prevent instantiation
     }
 
-    private static final Logger LOGGER = Logger.getLogger(MarkdownUtils.class.getName());
+    private static final String INDENT_UNIT = "  ";
+    private static final int INDENT_LEVELS_PER_DEPTH = 2;
+    private static final String REPORT_TITLE = "# Web Crawler Result\n\n";
 
     /**
      * Converts the crawler result tree into a Markdown formatted string.
@@ -33,7 +35,7 @@ public class MarkdownUtils {
      */
     public static String toMarkdown(CrawlerResult result) {
         StringBuilder markdown = new StringBuilder();
-        markdown.append("# Web Crawler Result\n\n");
+        markdown.append(REPORT_TITLE);
         toMarkdownHelper(result, markdown, 0);
         return markdown.toString();
     }
@@ -43,38 +45,77 @@ public class MarkdownUtils {
             return;
         }
 
-        String indent = "  ".repeat(depth);
-        markdown.append(indent).append("- URL: ").append(result.getUrl()).append("\n");
-        markdown.append(indent).append("  - Broken: ").append(result.isBroken()).append("\n");
+        String indent = INDENT_UNIT.repeat(depth);
 
-        if (!result.getHeadings().isEmpty()) {
-            markdown.append(indent).append("  - Headings (h1-h6):\n");
-            for (String heading : result.getHeadings()) {
-                markdown.append(indent).append("    - ").append(heading).append("\n");
-            }
+        if (result.isBroken()) {
+            appendBrokenPage(result, markdown, indent);
+            return;
         }
 
+        appendSuccessfulPage(result, markdown, indent);
+
         if (!result.getLinkedPages().isEmpty()) {
-            markdown.append(indent).append("  - Linked Pages:\n");
+            markdown.append(indent)
+                    .append("  - Linked Pages:\n");
+
             for (CrawlerResult linkedPage : result.getLinkedPages()) {
-                toMarkdownHelper(linkedPage, markdown, depth + 2);
+                toMarkdownHelper(linkedPage, markdown, depth + INDENT_LEVELS_PER_DEPTH);
             }
+        }
+    }
+
+    private static void appendSuccessfulPage(CrawlerResult result, StringBuilder markdown, String indent) {
+        markdown.append(indent)
+                .append("- URL: ")
+                .append(result.getUrl())
+                .append("\n");
+
+        if (!result.getHeadings().isEmpty()) {
+            markdown.append(indent)
+                    .append("  - Headings (h1-h6):\n");
+
+            for (String heading : result.getHeadings()) {
+                markdown.append(indent)
+                        .append("    - ")
+                        .append(heading)
+                        .append("\n");
+            }
+        }
+    }
+
+    private static void appendBrokenPage(CrawlerResult result, StringBuilder markdown, String indent) {
+        markdown.append(indent)
+                .append("- URL: ")
+                .append(result.getUrl())
+                .append(" (BROKEN)\n");
+
+        if (result.getError() != null) {
+            markdown.append(indent)
+                    .append("  - Error Type: ")
+                    .append(result.getError().exceptionType())
+                    .append("\n");
+
+            markdown.append(indent)
+                    .append("  - Error Message: ")
+                    .append(result.getError().message())
+                    .append("\n");
         }
     }
 
     /**
      * Writes the given Markdown string to a file with the specified filename.
-     * If the file cannot be written, an error message is printed to the console.
-     * 
+     *
      * @param markdown the Markdown content to write
      * @param filename the name of the file to write the Markdown content to
+     * @throws UncheckedIOException if the file cannot be written; the wrapped
+     *                              {@link IOException} contains the underlying
+     *                              cause
      */
     public static void writeMarkdownToFile(String markdown, String filename) {
         try (FileWriter writer = new FileWriter(filename)) {
             writer.write(markdown);
         } catch (IOException e) {
-            LOGGER.severe(() -> "ERROR: Could not write markdown to file: " + filename);
-            LOGGER.severe(() -> "Reason: " + e.getMessage());
+            throw new UncheckedIOException("Could not write markdown to file: " + filename, e);
         }
     }
 }
